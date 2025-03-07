@@ -1,0 +1,35 @@
+from tkinter import *
+from tkinter import messagebox
+
+window = Tk()
+
+def check_winner(board,player):
+    for row in range(3):
+        if board[row][0] == board[row][1] == board[row][2] == player:
+            return True
+    for column in range(3):
+        if board[0][column] == board[1][column] == board[2][column] == player:
+            return True
+# continue next class with diagonals
+
+def game_board():
+    board = [[""for _ in range(3)] for _ in range(3)]
+    current_player = "x"
+    def handle_click(row,column):
+        nonlocal current_player
+        if board[row][column] == "":
+            board[row][column] = current_player
+            button = buttons[row][column]
+            button['text'] = current_player
+            button["state"] = "disabled"
+    buttons = []
+    for i in range(3):
+        row = []
+        for j in range (3):
+            button = Button(window,text="",width=5,height=2,command=lambda:handle_click(i,j))
+            button.grid(row=i,column=j)
+            row.append(button)
+        buttons.append(row)
+game_board()
+
+window.mainloop()
