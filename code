@@ -11,22 +11,47 @@ def check_winner(board,player):
         if board[0][column] == board[1][column] == board[2][column] == player:
             return True
 # continue next class with diagonals
+    if (board[0][0] == board[1][1] == board[2][2] == player) or \
+        (board[0][2]== board[1][1] == board[2][0] == player):
+        return True
+
+def board_fill(board):
+    #row
+    for row in board:
+        for column in row:
+            if column == " ":
+                return False
+    return True
+
+
+    
 
 def game_board():
-    board = [[""for _ in range(3)] for _ in range(3)]
+    board = [[" "for _ in range(3)] for _ in range(3)]
     current_player = "x"
     def handle_click(row,column):
         nonlocal current_player
-        if board[row][column] == "":
+        if board[row][column] == " ":
             board[row][column] = current_player
             button = buttons[row][column]
             button['text'] = current_player
             button["state"] = "disabled"
+            if check_winner(board,current_player) == True:
+                messagebox.showinfo("Winner",current_player + ",Congrats")
+            elif board_fill(board):
+                messagebox.showerror("Draw","Board has filled")
+            else:
+                if current_player == "x":
+                    current_player = "o"
+                else:
+                    current_player = "x"
+
     buttons = []
     for i in range(3):
         row = []
         for j in range (3):
-            button = Button(window,text="",width=5,height=2,command=lambda:handle_click(i,j))
+            button = Button(window,text="",width=5,height=2,\
+                            command=lambda row = i, col = j:handle_click(row,col))
             button.grid(row=i,column=j)
             row.append(button)
         buttons.append(row)
